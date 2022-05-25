@@ -2,7 +2,7 @@
  * @Author: lijiaxin 1003914407@qq.com
  * @Date: 2022-05-24 20:01:27
  * @LastEditors: lijiaxin 1003914407@qq.com
- * @LastEditTime: 2022-05-25 18:00:34
+ * @LastEditTime: 2022-05-25 20:12:03
  * @FilePath: \min-vue\src\reactivity\effect.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,8 +20,7 @@ class ReactiveEffect{
     }
     run(){
         activeEffect=this //在执行 effect函数的时候才会收集这个依赖
-        this._fn()
-      
+        return this._fn() //runner 可以拿到 fn的执行结果所以直接return出去
     }
 }
 
@@ -54,6 +53,6 @@ export function  update(target,key) {
 export function effect(fn) {
     let _effect= new ReactiveEffect(fn)
     _effect.run()
-    console.log(activeEffect);
-    
+    //可以 用 let a=effect() a() 说明 effect的返回值为一个函数,执行后可以拿到run里的值说明调用的就是run
+   return   _effect.run.bind(_effect)
 }
